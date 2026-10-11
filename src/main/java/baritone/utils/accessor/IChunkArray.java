@@ -23,6 +23,21 @@ import net.minecraft.world.level.chunk.LevelChunk;
 public interface IChunkArray {
     void copyFrom(IChunkArray other);
 
+    /**
+     * Insert a chunk directly if it's within range of this array's current center,
+     * bypassing {@link #copyFrom}'s assumption that the source array shares layout
+     * with this one. Used to backfill from chunk sources (such as mods that replace
+     * the vanilla backing array, e.g. Immersive Portals) where the normal array-copy
+     * approach would otherwise silently yield no data.
+     */
+    void putIfInRange(LevelChunk chunk);
+
+    /**
+     * Explicitly set this array's view center, independent of {@link #copyFrom}. Needed
+     * because some chunk sources never report an up-to-date center (see {@link #putIfInRange}).
+     */
+    void setCenter(int x, int z);
+
     AtomicReferenceArray<LevelChunk> getChunks();
 
     int centerX();

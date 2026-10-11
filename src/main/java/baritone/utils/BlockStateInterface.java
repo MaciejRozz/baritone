@@ -77,7 +77,8 @@ public class BlockStateInterface {
     }
 
     public boolean worldContainsLoadedChunk(int blockX, int blockZ) {
-        return provider.hasChunk(blockX >> 4, blockZ >> 4);
+        LevelChunk chunk = provider.getChunk(blockX >> 4, blockZ >> 4, ChunkStatus.FULL, false);
+        return chunk != null && !chunk.isEmpty();
     }
 
     public static Block getBlock(IPlayerContext ctx, BlockPos pos) { // won't be called from the pathing thread because the pathing thread doesn't make a single blockpos pog
